@@ -1,0 +1,92 @@
+Start by creating a database called assetDB. 
+
+mysql> create database assetDB;
+Query OK, 1 row affected (0.02 sec)
+mysql> use assetDB;
+Database changed
+mysql>
+
+Then create the following tables:
+
+1.Employees Table:
+
+mysql> CREATE TABLE employees (
+    ->     employee_id INT AUTO_INCREMENT,
+    ->     name VARCHAR(100) NOT NULL,
+    ->     department VARCHAR(50),
+    ->     email VARCHAR(100) UNIQUE NOT NULL,
+    ->     password VARCHAR(255) NOT NULL,
+    ->     CONSTRAINT employee_pk PRIMARY KEY(employee_id),
+    ->     CONSTRAINT email_format CHECK (email LIKE '%_@_%._%')
+    -> );
+Query OK, 0 rows affected (0.24 sec)
+
+
+2. Assets Table:
+
+mysql> CREATE TABLE assets (
+    ->     asset_id INT AUTO_INCREMENT,
+    ->     name VARCHAR(100) NOT NULL,
+    ->     type VARCHAR(50) NOT NULL,
+    ->     serial_number VARCHAR(100) UNIQUE NOT NULL,
+    ->     purchase_date DATE,
+    ->     location VARCHAR(100),
+    ->     status VARCHAR(50) NOT NULL DEFAULT 'in use',
+    ->     owner_id INT,
+    ->     CONSTRAINT asset_pk PRIMARY KEY(asset_id),
+    ->     CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES employees(employee_id)
+    ->         ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+
+3. Maintenance Records Table:
+
+mysql> CREATE TABLE maintenance_records (
+    ->     maintenance_id INT AUTO_INCREMENT,
+    ->     asset_id INT NOT NULL,
+    ->     maintenance_date DATE NOT NULL,
+    ->     description TEXT,
+    ->     cost DECIMAL(10, 2),
+    ->     CONSTRAINT maint_pk PRIMARY KEY(maintenance_id),
+    ->     CONSTRAINT fk_asset FOREIGN KEY (asset_id) REFERENCES assets(asset_id)
+    ->         ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+
+4.Asset Allocations Table:
+
+mysql> CREATE TABLE asset_allocations (
+    ->     allocation_id INT AUTO_INCREMENT,
+    ->     asset_id INT NOT NULL,
+    ->     employee_id INT NOT NULL,
+    ->     allocation_date DATE NOT NULL,
+    ->     return_date DATE,
+    ->     CONSTRAINT asset_all_pk PRIMARY KEY(allocation_id),
+    ->     CONSTRAINT fk_asset_allocation FOREIGN KEY (asset_id) REFERENCES assets(asset_id)
+    ->         ON DELETE CASCADE,
+    ->     CONSTRAINT fk_employee_allocation FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    ->         ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+
+5.Reservations Table:
+
+mysql> CREATE TABLE reservations (
+    ->     reservation_id INT AUTO_INCREMENT,
+    ->     asset_id INT NOT NULL,
+    ->     employee_id INT NOT NULL,
+    ->     reservation_date DATE NOT NULL,
+    ->     start_date DATE NOT NULL,
+    ->     end_date DATE NOT NULL,
+    ->     status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    ->     CONSTRAINT reserve_pk PRIMARY KEY(reservation_id),
+    ->     CONSTRAINT fk_asset_reservation FOREIGN KEY (asset_id) REFERENCES assets(asset_id)
+    ->         ON DELETE CASCADE,
+    ->     CONSTRAINT fk_employee_reservation FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    ->         ON DELETE CASCADE,
+    ->     CONSTRAINT valid_reservation_status CHECK (status IN ('pending', 'approved', 'canceled'))
+    -> );
+Query OK, 0 rows affected (0.07 sec)
