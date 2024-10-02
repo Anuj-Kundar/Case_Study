@@ -144,6 +144,21 @@ mysql> SELECT * FROM asset_allocations;
 
 5.Inserting in Reservations table:
 
+mysql> INSERT INTO reservations (asset_id, employee_id, reservation_date, start_date, end_date, status)
+    -> VALUES
+    ->     (1, 1, '2023-01-05', '2023-01-10', '2023-01-15', 'approved'),
+    ->     (2, 2, '2023-02-10', '2023-02-12', '2023-02-18', 'pending'),
+    ->     (3, 3, '2023-03-01', '2023-03-05', '2023-03-10', 'approved'),
+    ->     (4, 4, '2023-04-15', '2023-04-20', '2023-04-25', 'canceled'),
+    ->     (5, 5, '2023-05-22', '2023-05-25', '2023-05-30', 'approved'),
+    ->     (6, 6, '2023-06-10', '2023-06-12', '2023-06-20', 'pending'),
+    ->     (7, 7, '2023-07-18', '2023-07-20', '2023-07-25', 'approved'),
+    ->     (8, 8, '2023-08-05', '2023-08-10', '2023-08-15', 'pending'),
+    ->     (9, 9, '2023-09-01', '2023-09-05', '2023-09-10', 'canceled'),
+    ->     (10, 10, '2023-10-01', '2023-10-05', '2023-10-10', 'approved');
+Query OK, 10 rows affected (0.05 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
 mysql> SELECT * FROM reservations;
 +----------------+----------+-------------+------------------+------------+------------+----------+
 | reservation_id | asset_id | employee_id | reservation_date | start_date | end_date   | status   |
