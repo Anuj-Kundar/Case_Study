@@ -17,7 +17,6 @@ mysql> CREATE TABLE employees (
     ->     email VARCHAR(100) UNIQUE NOT NULL,
     ->     password VARCHAR(255) NOT NULL,
     ->     CONSTRAINT employee_pk PRIMARY KEY(employee_id),
-    ->     CONSTRAINT email_format CHECK (email LIKE '%_@_%._%')
     -> );
 Query OK, 0 rows affected (0.24 sec)
 
